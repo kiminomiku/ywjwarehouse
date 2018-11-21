@@ -2654,3 +2654,51 @@ void MirrorPreOrderTraverse(Node *root, vector<int> &MirrorPreOrderSequence) {
 	MirrorPreOrderTraverse(root->right, MirrorPreOrderSequence);
 	MirrorPreOrderTraverse(root->left, MirrorPreOrderSequence);
 }
+
+//1081
+int GCD(int a, int b) {
+	if (a < b)
+		std::swap(a, b);
+	return b == 0 ? a : GCD(b, a%b);
+}
+
+int Rational_Sum()
+{
+	int n, gcd, devide, sum = 0;
+	cin >> n;
+	vector<int> numerator_list(n);
+	vector<int> denominator_list(n);
+	for (int i = 0; i < n; i++) {
+		scanf("%d/%d",&numerator_list[i],&denominator_list[i]);
+	}
+	int denominator = denominator_list[0];
+	for (int i = 1; i < n; i++) {
+		gcd = GCD(denominator_list[i], denominator);
+		denominator *= denominator_list[i];
+		denominator /= gcd;
+	}
+	for (int i = 0; i < n; i++) {
+		devide = denominator / denominator_list[i];
+		numerator_list[i] *= devide;
+	}
+	for (int i = 0; i < n; i++) {
+		sum += numerator_list[i];
+	}
+	
+	if (sum%denominator == 0) {
+		printf_s("%d\n", sum / denominator);
+	}
+	else {
+		if (sum%denominator != 0 && sum / denominator != 0) {
+			if (sum < 0) {
+				printf_s("-%d %d/%d\n", abs(sum) / denominator, (abs(sum)%denominator) / GCD(abs(sum), denominator), denominator / GCD(abs(sum), denominator));
+			}
+			else {
+				printf_s("%d %d/%d\n", abs(sum) / denominator, (abs(sum) % denominator) / GCD(abs(sum), denominator), denominator / GCD(abs(sum), denominator));
+			}
+		}
+		else if (sum / denominator == 0) {
+			printf_s("%d/%d\n", (sum%denominator) / GCD(sum, denominator), denominator / GCD(sum, denominator));
+		}
+	}
+}
